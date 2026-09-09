@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO Title Generator — Free AI Tool | IncomeAIHub</title>
+<meta name="description" content="Generate high-CTR, SEO-optimized titles instantly. Free AI-powered SEO Title Generator for blogs, YouTube, and articles.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg-0:#05060a;
+    --bg-1:#0a0e17;
+    --bg-2:#0e1420;
+    --panel:#0c111c;
+    --cyan:#00f0ff;
+    --purple:#a855f7;
+    --green:#39ff8f;
+    --pink:#ff2e88;
+    --text-0:#e8f6ff;
+    --text-1:#93a4c3;
+    --text-2:#5a6786;
+    --border:#1c2536;
+    --danger:#ff4d6d;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(0,240,255,0.08), transparent 45%),
+      radial-gradient(ellipse at 90% 10%, rgba(168,85,247,0.10), transparent 45%),
+      var(--bg-0);
+    color:var(--text-0);
+    font-family:'Rajdhani', sans-serif;
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  /* scanline overlay */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.015) 0px,
+      rgba(255,255,255,0.015) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+    z-index:2;
+    mix-blend-mode:overlay;
+  }
+
+  .grid-bg{
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(0,240,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,240,255,0.035) 1px, transparent 1px);
+    background-size:38px 38px;
+    mask-image:radial-gradient(ellipse at 50% 0%, black 0%, transparent 70%);
+    z-index:0;
+    pointer-events:none;
+  }
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 18px 80px;
+  }
+
+  /* header */
+  header{
+    text-align:center;
+    padding:34px 10px 26px;
+  }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'Share Tech Mono', monospace;
+    font-size:11px;
+    letter-spacing:2px;
+    color:var(--green);
+    border:1px solid rgba(57,255,143,0.35);
+    background:rgba(57,255,143,0.06);
+    padding:6px 14px;
+    border-radius:999px;
+    text-transform:uppercase;
+  }
+  .badge .dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 8px var(--green);
+    animation:pulse 1.6s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:0.3;}
+  }
+
+  h1{
+    font-family:'Orbitron', sans-serif;
+    font-weight:900;
+    font-size:clamp(28px, 5vw, 48px);
+    margin-top:16px;
+    letter-spacing:1px;
+    background:linear-gradient(90deg, var(--cyan), var(--purple) 55%, var(--pink));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow:0 0 40px rgba(0,240,255,0.25);
+  }
+
+  header p{
+    color:var(--text-1);
+    font-size:16px;
+    max-width:560px;
+    margin:14px auto 0;
+    line-height:1.6;
+  }
+
+  /* panel */
+  .panel{
+    background:linear-gradient(180deg, var(--panel), var(--bg-2));
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:26px;
+    position:relative;
+    box-shadow:0 0 0 1px rgba(255,255,255,0.02), 0 20px 60px -30px rgba(0,240,255,0.15);
+  }
+  .panel + .panel{ margin-top:22px; }
+
+  .panel::before{
+    content:"";
+    position:absolute;
+    top:0; left:18px; right:18px; height:1px;
+    background:linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity:0.5;
+  }
+
+  .panel-title{
+    font-family:'Orbitron', sans-serif;
+    font-size:14px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--cyan);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .panel-title::before{
+    content:"";
+    width:8px;height:8px;
+    background:var(--cyan);
+    box-shadow:0 0 10px var(--cyan);
+    display:inline-block;
+    transform:rotate(45deg);
+  }
+
+  label{
+    display:block;
+    font-size:13px;
+    letter-spacing:1px;
+    color:var(--text-1);
+    text-transform:uppercase;
+    margin-bottom:8px;
+    font-weight:600;
+  }
+
+  input[type="text"], select, textarea{
+    width:100%;
+    background:var(--bg-1);
+    border:1px solid var(--border);
+    color:var(--text-0);
+    font-family:'Rajdhani', sans-serif;
+    font-size:16px;
+    font-weight:500;
+    padding:13px 14px;
+    border-radius:10px;
+    outline:none;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  input[type="text"]:focus, select:focus, textarea:focus{
+    border-color:var(--cyan);
+    box-shadow:0 0 0 3px rgba(0,240,255,0.12);
+  }
+  ::placeholder{ color:var(--text-2); }
+
+  .field-row{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:16px;
+    margin-bottom:16px;
+  }
+  @media(min-width:640px){
+    .field-row.two{ grid-template-columns:1fr 1fr; }
+    .field-row.three{ grid-template-columns:1fr 1fr 1fr; }
+  }
+
+  .chip-group{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .chip{
+    font-family:'Share Tech Mono', monospace;
+    font-size:12px;
+    padding:8px 13px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:var(--bg-1);
+    color:var(--text-1);
+    cursor:pointer;
+    user-select:none;
+    transition:all .15s;
+  }
+  .chip:hover{ border-color:var(--cyan); color:var(--text-0); }
+  .chip.active{
+    background:rgba(0,240,255,0.12);
+    border-color:var(--cyan);
+    color:var(--cyan);
+    box-shadow:0 0 14px rgba(0,240,255,0.15);
+  }
+
+  .btn-primary{
+    width:100%;
+    margin-top:8px;
+    background:linear-gradient(90deg, var(--cyan), var(--purple));
+    color:#04060a;
+    border:none;
+    font-family:'Orbitron', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    padding:16px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:transform .15s, box-shadow .15s;
+    box-shadow:0 10px 30px -8px rgba(0,240,255,0.45);
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 34px -8px rgba(0,240,255,0.6); }
+  .btn-primary:active{ transform:translateY(0); }
+  .btn-primary:disabled{ opacity:0.6; cursor:not-allowed; transform:none; }
+
+  .btn-secondary{
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--text-1);
+    font-family:'Share Tech Mono', monospace;
+    font-size:12px;
+    padding:9px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:all .15s;
+    white-space:nowrap;
+  }
+  .btn-secondary:hover{ border-color:var(--purple); color:var(--purple); }
+
+  /* results */
+  #results{ display:none; }
+  #results.show{ display:block; }
+
+  .results-toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .results-toolbar .count{
+    font-family:'Share Tech Mono', monospace;
+    color:var(--text-2);
+    font-size:12px;
+  }
+
+  .title-card{
+    background:var(--bg-1);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:16px 16px 14px;
+    margin-bottom:12px;
+    transition:border-color .15s, transform .15s;
+    animation:fadeUp .35s ease both;
+  }
+  .title-card:hover{ border-color:rgba(0,240,255,0.4); }
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(8px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .title-text{
+    font-size:17px;
+    font-weight:600;
+    line-height:1.45;
+    color:var(--text-0);
+    margin-bottom:10px;
+  }
+
+  .title-meta{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+  .meta-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+
+  .score-pill{
+    font-family:'Share Tech Mono', monospace;
+    font-size:11px;
+    padding:4px 10px;
+    border-radius:999px;
+    font-weight:600;
+    letter-spacing:0.5px;
+  }
+  .score-good{ background:rgba(57,255,143,0.12); color:var(--green); border:1px solid rgba(57,255,143,0.35); }
+  .score-mid{ background:rgba(255,196,0,0.12); color:#ffc400; border:1px solid rgba(255,196,0,0.35); }
+  .score-low{ background:rgba(255,77,109,0.12); color:var(--danger); border:1px solid rgba(255,77,109,0.35); }
+
+  .char-count{
+    font-family:'Share Tech Mono', monospace;
+    font-size:11px;
+    color:var(--text-2);
+  }
+  .char-count.warn{ color:#ffc400; }
+  .char-count.bad{ color:var(--danger); }
+
+  .copy-btn{
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--text-1);
+    font-family:'Share Tech Mono', monospace;
+    font-size:11px;
+    padding:6px 12px;
+    border-radius:7px;
+    cursor:pointer;
+    transition:all .15s;
+  }
+  .copy-btn:hover{ border-color:var(--cyan); color:var(--cyan); }
+  .copy-btn.copied{ border-color:var(--green); color:var(--green); }
+
+  .style-tag{
+    font-family:'Share Tech Mono', monospace;
+    font-size:10px;
+    color:var(--purple);
+    text-transform:uppercase;
+    letter-spacing:1px;
+  }
+
+  /* export bar */
+  .export-bar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:18px;
+  }
+
+  /* keyword density note */
+  .hint{
+    font-size:13px;
+    color:var(--text-2);
+    margin-top:8px;
+    line-height:1.5;
+  }
+  .hint b{ color:var(--text-1); }
+
+  /* Hindi guide */
+  .hindi-guide{
+    line-height:1.8;
+    color:var(--text-1);
+    font-size:15px;
+  }
+  .hindi-guide h3{
+    font-family:'Orbitron', sans-serif;
+    font-size:13px;
+    color:var(--green);
+    letter-spacing:1px;
+    margin:18px 0 8px;
+    text-transform:uppercase;
+  }
+  .hindi-guide h3:first-child{ margin-top:0; }
+  .hindi-guide ul{ padding-left:20px; margin:6px 0; }
+  .hindi-guide li{ margin-bottom:6px; }
+
+  /* AdSense slots */
+  .ad-slot{
+    border:1px dashed var(--border);
+    border-radius:12px;
+    min-height:100px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--text-2);
+    font-family:'Share Tech Mono', monospace;
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin:22px 0;
+  }
+
+  footer{
+    text-align:center;
+    color:var(--text-2);
+    font-size:12px;
+    font-family:'Share Tech Mono', monospace;
+    margin-top:40px;
+    letter-spacing:0.5px;
+  }
+  footer span{ color:var(--cyan); }
+
+  /* toast */
+  #toast{
+    position:fixed;
+    bottom:24px;
+    left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:var(--bg-1);
+    border:1px solid var(--green);
+    color:var(--green);
+    padding:12px 20px;
+    border-radius:10px;
+    font-family:'Share Tech Mono', monospace;
+    font-size:13px;
+    opacity:0;
+    pointer-events:none;
+    transition:all .25s;
+    z-index:10;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+  }
+  #toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
+
+  /* loader */
+  .loader-dots{
+    display:inline-flex;
+    gap:4px;
+    align-items:center;
+  }
+  .loader-dots span{
+    width:6px; height:6px;
+    background:#04060a;
+    border-radius:50%;
+    animation:bounce 1s infinite ease-in-out;
+  }
+  .loader-dots span:nth-child(2){ animation-delay:.15s; }
+  .loader-dots span:nth-child(3){ animation-delay:.3s; }
+  @keyframes bounce{
+    0%,80%,100%{ transform:scale(0.6); opacity:0.5; }
+    40%{ transform:scale(1); opacity:1; }
+  }
+
+  .empty-state{
+    text-align:center;
+    color:var(--text-2);
+    padding:30px 10px;
+    font-size:14px;
+  }
+
+  @media(max-width:480px){
+    .panel{ padding:18px; }
+    h1{ font-size:26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<div class="wrap">
+
+  <header>
+    <div class="badge"><span class="dot"></span> Free • No Signup • Unlimited</div>
+    <h1>SEO Title Generator</h1>
+    <p>Generate high-CTR, search-optimized titles for blogs, YouTube videos, and articles in seconds. Built for Indian creators & freelancers.</p>
+  </header>
+
+  <!-- INPUT PANEL -->
+  <div class="panel">
+    <div class="panel-title">Generate Titles</div>
+
+    <div class="field-row">
+      <div>
+        <label for="topic">Topic / Main Keyword</label>
+        <input type="text" id="topic" placeholder="e.g. freelance income tax India, weight loss diet plan..." maxlength="120">
+      </div>
+    </div>
+
+    <div class="field-row two">
+      <div>
+        <label for="secondaryKeyword">Secondary Keyword <span style="color:var(--text-2); text-transform:none; font-weight:400;">(optional)</span></label>
+        <input type="text" id="secondaryKeyword" placeholder="e.g. 2026, beginners, free..." maxlength="60">
+      </div>
+      <div>
+        <label for="contentType">Content Type</label>
+        <select id="contentType">
+          <option value="blog">Blog Post / Article</option>
+          <option value="youtube">YouTube Video</option>
+          <option value="product">Product / Landing Page</option>
+          <option value="listicle">Listicle</option>
+          <option value="howto">How-To Guide</option>
+          <option value="news">News / Update</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <label>Tone / Style</label>
+      <div class="chip-group" id="toneChips">
+        <div class="chip active" data-tone="engaging">Engaging</div>
+        <div class="chip" data-tone="professional">Professional</div>
+        <div class="chip" data-tone="curiosity">Curiosity-Driven</div>
+        <div class="chip" data-tone="urgent">Urgent / FOMO</div>
+        <div class="chip" data-tone="numbers">Number-Based</div>
+        <div class="chip" data-tone="emotional">Emotional</div>
+      </div>
+    </div>
+
+    <div class="field-row two">
+      <div>
+        <label for="titleLength">Preferred Length</label>
+        <select id="titleLength">
+          <option value="short">Short (under 40 chars)</option>
+          <option value="ideal" selected>Ideal SEO (50–60 chars)</option>
+          <option value="long">Long (60–70 chars)</option>
+        </select>
+      </div>
+      <div>
+        <label for="numTitles">Number of Titles</label>
+        <select id="numTitles">
+          <option value="6">6 titles</option>
+          <option value="10" selected>10 titles</option>
+          <option value="15">15 titles</option>
+          <option value="20">20 titles</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="generateBtn" onclick="generateTitles()">
+      <span id="btnText">⚡ Generate SEO Titles</span>
+    </button>
+    <p class="hint">Tip: Use a specific topic (e.g. <b>"GST filing for freelancers"</b> instead of just <b>"GST"</b>) for sharper, more clickable titles.</p>
+  </div>
+
+  <!-- AD SLOT 1 -->
+  <div class="ad-slot">Ad Slot — 728x90 / Responsive</div>
+
+  <!-- RESULTS PANEL -->
+  <div class="panel" id="results">
+    <div class="results-toolbar">
+      <div class="panel-title" style="margin-bottom:0;">Generated Titles</div>
+      <div class="count" id="resultCount"></div>
+    </div>
+    <div id="titleList"></div>
+    <div class="export-bar">
+      <button class="btn-secondary" onclick="copyAllTitles()">📋 Copy All</button>
+      <button class="btn-secondary" onclick="downloadTitles()">⬇ Download .txt</button>
+      <button class="btn-secondary" onclick="generateTitles()">🔁 Regenerate</button>
+    </div>
+  </div>
+
+  <!-- AD SLOT 2 -->
+  <div class="ad-slot">Ad Slot — 336x280 / In-Feed</div>
+
+  <!-- HINDI GUIDE (embedded, not hidden) -->
+  <div class="panel">
+    <div class="panel-title">इस्तेमाल कैसे करें (How To Use — Hindi Guide)</div>
+    <div class="hindi-guide">
+      <h3>टूल इस्तेमाल करने का तरीका</h3>
+      <ul>
+        <li>सबसे पहले अपना <b>मुख्य Topic या Keyword</b> डालें — जैसे "freelance income tax India"</li>
+        <li>अगर कोई दूसरा keyword जोड़ना है (जैसे साल या "beginners"), तो वो <b>Secondary Keyword</b> में डालें</li>
+        <li>अपना <b>Content Type</b> चुनें — Blog, YouTube Video, Product Page, आदि</li>
+        <li>जो <b>Tone</b> आपके audience को पसंद आए वो select करें (जैसे Curiosity या Urgent)</li>
+        <li><b>Generate SEO Titles</b> बटन दबाएं — कुछ ही सेकंड में आपको कई titles मिल जाएंगे</li>
+        <li>हर title के नीचे एक <b>SEO Score</b> और <b>Character Count</b> दिखेगा — हरा मतलब अच्छा, पीला/लाल मतलब सुधारें</li>
+        <li><b>Copy</b> बटन से कोई भी title तुरंत copy करें, या <b>Copy All</b> से सारे titles एक साथ ले जाएं</li>
+      </ul>
+      <h3>पैसे कैसे कमाएं इस टूल से (Freelancing Use Case)</h3>
+      <ul>
+        <li>Fiverr/Upwork पर "SEO Title Writing" या "Blog Title Optimization" service के तौर पर बेचें</li>
+        <li>YouTubers और bloggers को monthly title-optimization service दें (₹500–₹2000/month per client)</li>
+        <li>अपने खुद के blog या YouTube channel के titles सुधारने के लिए रोज़ इस्तेमाल करें — बेहतर CTR = ज़्यादा traffic</li>
+        <li>Client के लिए 10-15 titles generate करके best 3 उन्हें सुझाएं — ये एक अच्छा value-added service बन सकता है</li>
+      </ul>
+      <h3>अच्छा SEO Title बनाने के टिप्स</h3>
+      <ul>
+        <li>Title 50–60 characters के बीच रखें — Google में पूरा दिखता है</li>
+        <li>Main keyword जितना हो सके शुरुआत में रखें</li>
+        <li>Numbers (जैसे "7 Ways", "2026") titles को ज़्यादा clickable बनाते हैं</li>
+        <li>हर page/video के लिए unique title रखें, duplicate ना करें</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <span>IncomeAIHub</span> · Free AI Tools for Indian Freelancers & Creators
+  </footer>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ============ DATA: Title templates by content type + tone ============ */
+
+const templates = {
+  engaging: [
+    "{Topic}: The Complete Guide {Secondary}",
+    "How {Topic} Can Change Your Life {Secondary}",
+    "{Topic} Explained: Everything You Need to Know {Secondary}",
+    "The Ultimate {Topic} Guide {Secondary}",
+    "Why {Topic} Matters More Than Ever {Secondary}",
+    "Discover the Power of {Topic} {Secondary}",
+  ],
+  professional: [
+    "{Topic}: A Comprehensive Overview {Secondary}",
+    "Understanding {Topic}: Key Insights {Secondary}",
+    "{Topic} — Best Practices and Strategies {Secondary}",
+    "A Practical Approach to {Topic} {Secondary}",
+    "{Topic}: What Professionals Need to Know {Secondary}",
+    "Mastering {Topic} in {Secondary}",
+  ],
+  curiosity: [
+    "The One Thing About {Topic} Nobody Tells You {Secondary}",
+    "What Happens When You Try {Topic}? {Secondary}",
+    "Is {Topic} Really Worth It? {Secondary}",
+    "The Secret Behind {Topic} {Secondary}",
+    "You Won't Believe What {Topic} Can Do {Secondary}",
+    "What They Don't Tell You About {Topic} {Secondary}",
+  ],
+  urgent: [
+    "Don't Miss This: {Topic} {Secondary}",
+    "{Topic}: Act Before It's Too Late {Secondary}",
+    "Last Chance to Master {Topic} {Secondary}",
+    "{Topic} — Why You Need This Right Now {Secondary}",
+    "Stop Ignoring {Topic}: Here's Why {Secondary}",
+    "{Topic}: Limited Time Insights {Secondary}",
+  ],
+  numbers: [
+    "7 Ways to Master {Topic} {Secondary}",
+    "10 {Topic} Tips You Can't Ignore {Secondary}",
+    "5 Mistakes to Avoid in {Topic} {Secondary}",
+    "3 Proven Steps to {Topic} {Secondary}",
+    "15 {Topic} Ideas That Actually Work {Secondary}",
+    "9 Things About {Topic} You Should Know {Secondary}",
+  ],
+  emotional: [
+    "How {Topic} Changed Everything for Me {Secondary}",
+    "The Struggle With {Topic} — And How to Win {Secondary}",
+    "Finally, A Real Solution for {Topic} {Secondary}",
+    "{Topic}: A Journey Worth Taking {Secondary}",
+    "From Confused to Confident: {Topic} {Secondary}",
+    "{Topic} — The Honest Truth {Secondary}",
+  ]
+};
+
+const contentTypePrefix = {
+  blog: [],
+  youtube: ["Watch: ", ""],
+  product: ["", "Buy Guide: "],
+  listicle: [],
+  howto: ["How to ", ""],
+  news: ["Breaking: ", "Update: "]
+};
+
+/* ============ STATE ============ */
+let selectedTone = "engaging";
+
+document.getElementById('toneChips').addEventListener('click', (e)=>{
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  document.querySelectorAll('#toneChips .chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  selectedTone = chip.dataset.tone;
+});
+
+/* Enter key triggers generate */
+document.getElementById('topic').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter') generateTitles();
+});
+
+/* ============ HELPERS ============ */
+
+function toTitleCase(str){
+  const smallWords = new Set(['a','an','the','and','or','but','for','nor','on','at','to','from','by','of','in','with','is']);
+  return str.split(' ').map((w,i)=>{
+    if(w.length === 0) return w;
+    if(i !== 0 && smallWords.has(w.toLowerCase())) return w.toLowerCase();
+    return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+  }).join(' ');
+}
+
+function cleanTopic(raw){
+  return raw.trim().replace(/\s+/g,' ');
+}
+
+function scoreTitle(title, prefTargetLen){
+  const len = title.length;
+  let score = 100;
+
+  // length scoring
+  if(len < 30) score -= 25;
+  else if(len > 70) score -= 30;
+  else if(len >= 50 && len <= 60) score += 5;
+  else if(len > 60 && len <= 70) score -= 8;
+  else if(len < 50 && len >= 30) score -= 5;
+
+  // keyword near start bonus (already guaranteed by templates mostly)
+  // number presence bonus
+  if(/\d/.test(title)) score += 5;
+
+  // power word bonus
+  const powerWords = ["ultimate","secret","proven","free","best","complete","guide","instantly","easy","powerful","essential"];
+  if(powerWords.some(w=>title.toLowerCase().includes(w))) score += 5;
+
+  score = Math.max(35, Math.min(99, score));
+  return Math.round(score);
+}
+
+function scoreClass(score){
+  if(score >= 80) return 'score-good';
+  if(score >= 60) return 'score-mid';
+  return 'score-low';
+}
+
+function charClass(len){
+  if(len >= 45 && len <= 62) return '';
+  if(len < 45) return 'warn';
+  return 'bad';
+}
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i = a.length -1; i>0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+/* ============ CORE GENERATE ============ */
+
+function generateTitles(){
+  const topicRaw = document.getElementById('topic').value;
+  const topic = cleanTopic(topicRaw);
+
+  if(!topic){
+    showToast("⚠ Please enter a topic first", true);
+    document.getElementById('topic').focus();
+    return;
+  }
+
+  const secondary = cleanTopic(document.getElementById('secondaryKeyword').value);
+  const contentType = document.getElementById('contentType').value;
+  const numTitles = parseInt(document.getElementById('numTitles').value, 10);
+  const lengthPref = document.getElementById('titleLength').value;
+
+  // loading state
+  const btn = document.getElementById('generateBtn');
+  const btnText = document.getElementById('btnText');
+  btn.disabled = true;
+  btnText.innerHTML = 'Generating <span class="loader-dots"><span></span><span></span><span></span></span>';
+
+  setTimeout(()=>{
+    const results = buildTitles(topic, secondary, contentType, selectedTone, numTitles, lengthPref);
+    renderResults(results);
+    btn.disabled = false;
+    btnText.innerHTML = '⚡ Generate SEO Titles';
+    document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+  }, 550);
+}
+
+function buildTitles(topic, secondary, contentType, tone, count, lengthPref){
+  const topicDisplay = toTitleCase(topic);
+  const secDisplay = secondary ? toTitleCase(secondary) : "";
+
+  // Pull from selected tone primarily, blend in 2 other tones for variety once list is long
+  let pool = [...templates[tone]];
+  const otherTones = Object.keys(templates).filter(t=>t!==tone);
+  const blend1 = templates[otherTones[Math.floor(Math.random()*otherTones.length)]];
+  pool = pool.concat(blend1);
+
+  pool = shuffle(pool);
+
+  const prefixes = contentTypePrefix[contentType] || [""];
+
+  const out = [];
+  let i = 0;
+  let guard = 0;
+
+  while(out.length < count && guard < 200){
+    guard++;
+    const tmpl = pool[i % pool.length];
+    const prefix = prefixes[Math.floor(Math.random()*prefixes.length)] || "";
+    i++;
+
+    let title = tmpl
+      .replace("{Topic}", topicDisplay)
+      .replace("{Secondary}", secDisplay);
+
+    title = prefix + title;
+    title = title.replace(/\s+/g,' ').trim();
+    title = title.replace(/\s([.,!?:])/g, '$1');
+    // remove dangling trailing dash/colon if secondary was empty
+    title = title.replace(/[-:]\s*$/,'').trim();
+
+    // enforce rough length preference by trimming or skipping
+    if(lengthPref === 'short' && title.length > 42) continue;
+    if(lengthPref === 'ideal' && (title.length < 38 || title.length > 68)) {
+      if(title.length > 68){
+        title = title.slice(0,57).trim() + '...';
+      } else {
+        continue;
+      }
+    }
+    if(lengthPref === 'long' && title.length < 55) continue;
+
+    if(out.some(o=>o.title.toLowerCase() === title.toLowerCase())) continue;
+
+    out.push({
+      title,
+      score: scoreTitle(title, lengthPref)
+    });
+  }
+
+  // if we ran out of unique combos, pad with numbered variants
+  let n = 2;
+  while(out.length < count){
+    const base = toTitleCase(topic);
+    const filler = `${n} Best ${base} Strategies ${secDisplay}`.replace(/\s+/g,' ').trim();
+    if(!out.some(o=>o.title.toLowerCase() === filler.toLowerCase())){
+      out.push({title: filler, score: scoreTitle(filler, lengthPref)});
+    }
+    n++;
+    if(n > 40) break;
+  }
+
+  return out.slice(0, count).sort((a,b)=>b.score - a.score);
+}
+
+/* ============ RENDER ============ */
+
+function renderResults(results){
+  const list = document.getElementById('titleList');
+  const resultsPanel = document.getElementById('results');
+  const countEl = document.getElementById('resultCount');
+
+  if(!results.length){
+    list.innerHTML = '<div class="empty-state">No titles generated. Try a different topic.</div>';
+  } else {
+    list.innerHTML = results.map((r, idx)=>{
+      const len = r.title.length;
+      return `
+        <div class="title-card" style="animation-delay:${idx*0.03}s">
+          <div class="title-text">${escapeHtml(r.title)}</div>
+          <div class="title-meta">
+            <div class="meta-left">
+              <span class="score-pill ${scoreClass(r.score)}">SEO Score: ${r.score}</span>
+              <span class="char-count ${charClass(len)}">${len} chars</span>
+            </div>
+            <button class="copy-btn" onclick="copySingle(this, ${idx})">📋 Copy</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  countEl.textContent = `${results.length} titles generated`;
+  resultsPanel.classList.add('show');
+  window.__lastResults = results;
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ============ COPY / EXPORT ============ */
+
+function copySingle(btn, idx){
+  const results = window.__lastResults || [];
+  const title = results[idx] ? results[idx].title : '';
+  navigator.clipboard.writeText(title).then(()=>{
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{
+      btn.textContent = '📋 Copy';
+      btn.classList.remove('copied');
+    }, 1500);
+  });
+}
+
+function copyAllTitles(){
+  const results = window.__lastResults || [];
+  if(!results.length){ showToast("⚠ Nothing to copy yet"); return; }
+  const text = results.map(r=>r.title).join('\n');
+  navigator.clipboard.writeText(text).then(()=>{
+    showToast("✓ All titles copied to clipboard");
+  });
+}
+
+function downloadTitles(){
+  const results = window.__lastResults || [];
+  if(!results.length){ showToast("⚠ Nothing to download yet"); return; }
+  const text = results.map((r,i)=>`${i+1}. ${r.title}  (SEO Score: ${r.score}, ${r.title.length} chars)`).join('\n');
+  const blob = new Blob([text], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'seo-titles.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast("✓ Download started");
+}
+
+/* ============ TOAST ============ */
+let toastTimer;
+function showToast(msg){
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ toast.classList.remove('show'); }, 2200);
+}
+</script>
+
+</body>
+</html>
